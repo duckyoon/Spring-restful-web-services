@@ -1,5 +1,6 @@
 package com.junes.rest.webservices.restful_web_services.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
@@ -10,9 +11,13 @@ public class User {
     
     // 유효성 검증 진행
     @Size(min=2, message= "Name should have atleast 2 characters")
+    // 응답의 속성과 요소 이름을 커스터마이징 : JsonProperty
+    // 객체의 필드나 메서드가 JSON에서 어떤 이름으로 표현될지를 지정
+    @JsonProperty("user_name")
     private String name;
 
     @Past(message = "Birth Date should be in the past")
+    @JsonProperty("birth_date")
     private LocalDate birthDate;
 
     public User(Integer id, String name, LocalDate birthDate) {
