@@ -1,14 +1,17 @@
 package com.junes.rest.webservices.restful_web_services.filtering;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties("field1")
+//@JsonIgnoreProperties("field1")
+// 동적 필터링
+@JsonFilter("SomeBeanFilter")
 public class SomeBean {
     private String field1;
 
     // 정적 필터링(field2를 필터링한다, 표시하지 않게 함)
-    @JsonIgnore
+//    @JsonIgnore
     private String field2;
     private String field3;
 
