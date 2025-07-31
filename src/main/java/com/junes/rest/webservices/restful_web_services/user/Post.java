@@ -3,6 +3,7 @@ package com.junes.rest.webservices.restful_web_services.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Post {
@@ -19,12 +20,14 @@ public class Post {
     @JsonIgnore
     private User user;
 
+    @Size(min = 10)
     private String description;
 
     public Post(Integer id, String description) {
         this.id = id;
         this.description = description;
     }
+
 
     public Integer getId() {
         return id;
@@ -40,6 +43,14 @@ public class Post {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

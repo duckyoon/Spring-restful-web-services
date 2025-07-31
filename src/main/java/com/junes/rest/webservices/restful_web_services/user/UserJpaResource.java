@@ -1,5 +1,6 @@
 package com.junes.rest.webservices.restful_web_services.user;
 
+import com.junes.rest.webservices.restful_web_services.jpa.PostRepository;
 import com.junes.rest.webservices.restful_web_services.jpa.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.hateoas.EntityModel;
@@ -18,15 +19,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class UserJpaResource {
 
-    private UserDaoService service;
-
     private UserRepository repository;
+    private PostRepository postRepository;
 
 
-    public UserJpaResource(UserDaoService service, UserRepository repository){
-
-        this.service = service;
+    public UserJpaResource(UserRepository repository, PostRepository postRepository){
         this.repository = repository;
+        this.postRepository = postRepository;
     }
 
     //GET /users
@@ -93,6 +92,27 @@ public class UserJpaResource {
             throw new UserNotFoundException("id:"+id);
 
         return user.get().getPosts();
+    }
+
+    @PostMapping ("/jpa/users/{id}/posts")
+    public ResponseEntity<User> createPostForUser(@PathVariable int id, @Valid @RequestBody Post post){
+        Optional<User> user = repository.findById(id);
+        if (user.isEmpty())
+            throw new UserNotFoundException("id:"+id);
+
+        post.setUser(user.get());
+
+        Post savedPost = postRepository.save(post);
+
+        // http://localhost:8080/users/{id} 형태의 URI 생성
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedPost.getId())
+                .toUri();
+
+        // HTTP 상태코드 201 Created 와 함께 응답을 반환
+        // location 헤더에 새로 생성된 리소스의 URI 가 포함됨.
+        return ResponseEntity.created(location).build();
     }
 
 
