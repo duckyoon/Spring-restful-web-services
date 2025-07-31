@@ -7,6 +7,10 @@ import jakarta.persistence.*;
 @Entity
 public class Post {
 
+    public Post (){
+
+    }
+
     @Id
     @GeneratedValue
     private Integer id;
